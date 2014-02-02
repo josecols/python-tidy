@@ -1,0 +1,13 @@
+{
+	"name": "josecols.python-tidy",
+	"title": "Python Tidy",
+	"description": "Cleans up, regularizes, and reformats the text of Python scripts.",
+	"homepage": "https://github.com/josecols/python-tidy",
+	"version": "1.0.0",
+	"author": "José Cols <josecolsg@gmail.com>",
+	"license": "MIT",
+	"categories": "formatting",
+	"engines": {
+		"brackets": ">=0.24.0"
+	}
+}
