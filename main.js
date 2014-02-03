@@ -3,6 +3,7 @@ define(function (require, exports, module) {
 
 	var CommandManager = brackets.getModule("command/CommandManager"),
 		Commands = brackets.getModule('command/Commands'),
+		EditorManager = brackets.getModule("editor/EditorManager"),
 		DocumentManager = brackets.getModule("document/DocumentManager"),
 		PanelManager = brackets.getModule("view/PanelManager"),
 		ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
@@ -20,6 +21,10 @@ define(function (require, exports, module) {
 		COMMAND_NAME = "Python Tidy";
 
 	function _processStdout(formattedText, document) {
+		var editor = EditorManager.getCurrentFullEditor();
+		var cursor = editor.getCursorPos();
+		var scroll = editor.getScrollPos();
+
 		formattedText = JSON.parse(JSON.stringify(formattedText).replace(/\\r/g, ''));
 
 		if (document.getText() != formattedText) {
@@ -27,6 +32,8 @@ define(function (require, exports, module) {
 			CommandManager.execute(Commands.FILE_SAVE, {
 				doc: document
 			});
+			editor.setCursorPos(cursor);
+			editor.setScrollPos(scroll.x, scroll.y);
 		}
 	}
 
