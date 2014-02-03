@@ -2,6 +2,7 @@ define(function (require, exports, module) {
 	'use strict';
 
 	var CommandManager = brackets.getModule("command/CommandManager"),
+		Commands = brackets.getModule('command/Commands'),
 		DocumentManager = brackets.getModule("document/DocumentManager"),
 		PanelManager = brackets.getModule("view/PanelManager"),
 		ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
@@ -18,12 +19,15 @@ define(function (require, exports, module) {
 	var COMMAND_ID = "com.josecols.PythonTidy",
 		COMMAND_NAME = "Python Tidy";
 
-	function _processStdout(formattedText) {
-		var document = DocumentManager.getCurrentDocument();
-
+	function _processStdout(formattedText, document) {
 		formattedText = JSON.parse(JSON.stringify(formattedText).replace(/\\r/g, ''));
-		document.setText(formattedText);
-		document.notifySaved();
+
+		if (document.getText() != formattedText) {
+			document.setText(formattedText);
+			CommandManager.execute(Commands.FILE_SAVE, {
+				doc: document
+			});
+		}
 	}
 
 	function _processStderror(error) {
@@ -43,9 +47,10 @@ define(function (require, exports, module) {
 	}
 
 	function tidy() {
-		var directory = DocumentManager.getCurrentDocument().file._parentPath,
-			file = DocumentManager.getCurrentDocument().file._path,
-			language = DocumentManager.getCurrentDocument().language._name,
+		var document = DocumentManager.getCurrentDocument(),
+			directory = document.file._parentPath,
+			file = document.file._path,
+			language = document.language._name,
 			cmd = '';
 
 		if ('python' === language.toLowerCase()) {
@@ -64,7 +69,7 @@ define(function (require, exports, module) {
 						_processPanel(panel);
 					})
 					.then(function (formattedText) {
-						_processStdout(formattedText);
+						_processStdout(formattedText, document);
 					});
 			}).done();
 		}
