@@ -8,7 +8,7 @@ Clean up, regularize, and reformat the text of Python scripts by `Edit > Python 
 Note
 ----
 
-This extension makes use of PythonTidy.py package (https://pypi.python.org/pypi/PythonTidy/). You need Python for this extension to work.
+This extension makes use of PythonTidy.py package (https://pypi.python.org/pypi/PythonTidy/). You need Python and NodeJS for this extension to work.
 
 Installation
 ------------
